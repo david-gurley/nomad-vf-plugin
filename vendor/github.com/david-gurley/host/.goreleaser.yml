@@ -1,0 +1,54 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+    # you may remove this if you don't use vgo
+    - go mod tidy
+    # you may remove this if you don't need go generate
+    - go generate ./...
+# builds for server and agent
+builds:
+- binary: slick-host
+  main: ./cmd/host
+  env:
+  - CGO_ENABLED=0
+  - GO11MODULE=on
+  # come back to look at darwin
+  goarch:
+    - amd64 
+    - arm64 
+  goos:
+    - linux 
+
+archives:
+- replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+
+nfpms:
+  - id: slick-host
+    package_name: slick-host
+    file_name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    homepage: "https://slick.p6o.net"
+    maintainer: "David Gurley <dmgurley@gmail.com>"
+    description: "Slick Host Utilities"
+    license: MIT
+    formats:
+      - deb
+    dependencies:
+      - bash
+    # goreleaser automatically adds the binaries
+    contents:
