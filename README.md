@@ -2,7 +2,8 @@ Nomad vfio-pci Passthrough Device Plugin
 ==================
 
 This project provides support for allocating vfio-pci devices for passthrough
-to user space proceses - initially focused on QEMU. 
+to user space proceses - initially focused on QEMU. The initial target use case
+is NICs/SmartNICs.
 
 Requirements
 ------------
